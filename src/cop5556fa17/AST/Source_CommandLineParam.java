@@ -3,7 +3,7 @@ package cop5556fa17.AST;
 import cop5556fa17.Scanner.Token;
 
 public class Source_CommandLineParam extends Source {
-	
+
 	public final Expression paramNum;
 
 	public Source_CommandLineParam(Token firstToken, Expression paramNum) {
@@ -41,7 +41,6 @@ public class Source_CommandLineParam extends Source {
 		return true;
 	}
 
-
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -50,9 +49,5 @@ public class Source_CommandLineParam extends Source {
 		builder.append("]");
 		return builder.toString();
 	}
-
-
-	
-	
 
 }

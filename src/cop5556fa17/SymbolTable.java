@@ -47,9 +47,17 @@ public class SymbolTable {
 		return result;
 	}
 
-	public Declaration lookupNode(String ident) {
-		Declaration decNode = null;
+	public boolean lookupNode(String ident) {
+		boolean result = false;
 		if (this.symbolTable.containsKey(ident)) {
+			result = true;
+		}
+		return result;
+	}
+	
+	public Declaration getNode(String ident) {
+		Declaration decNode = null;
+		if (this.lookupNode(ident)) {
 			decNode = this.symbolTable.get(ident);
 		}
 		return decNode;

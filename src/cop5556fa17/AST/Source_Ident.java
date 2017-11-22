@@ -3,9 +3,9 @@ package cop5556fa17.AST;
 import cop5556fa17.Scanner.Token;
 
 public class Source_Ident extends Source {
-	
+
 	public final String name;
-	
+
 	public Source_Ident(Token firstToken, Token name) {
 		super(firstToken);
 		this.name = name.getText();
@@ -13,7 +13,7 @@ public class Source_Ident extends Source {
 
 	@Override
 	public Object visit(ASTVisitor v, Object arg) throws Exception {
-		return v.visitSource_Ident(this,arg);
+		return v.visitSource_Ident(this, arg);
 	}
 
 	@Override
@@ -50,7 +50,4 @@ public class Source_Ident extends Source {
 		return builder.toString();
 	}
 
-
-
-	
 }
