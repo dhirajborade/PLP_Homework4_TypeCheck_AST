@@ -9,7 +9,7 @@ import cop5556fa17.TypeCheckVisitor.SemanticException;
 import cop5556fa17.AST.ASTNode;
 import cop5556fa17.AST.ASTVisitor;
 
-public class TypeCheckTestHarshit {
+public class TypeCheckTestAmit {
 
 	// set Junit to be able to catch exceptions
 	@Rule

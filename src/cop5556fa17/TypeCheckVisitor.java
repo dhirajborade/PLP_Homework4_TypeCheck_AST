@@ -29,53 +29,46 @@ import cop5556fa17.AST.Statement_In;
 import cop5556fa17.AST.Statement_Out;
 
 public class TypeCheckVisitor implements ASTVisitor {
-	
 
-		@SuppressWarnings("serial")
-		public static class SemanticException extends Exception {
-			Token t;
+	@SuppressWarnings("serial")
+	public static class SemanticException extends Exception {
+		Token t;
 
-			public SemanticException(Token t, String message) {
-				super("line " + t.line + " pos " + t.pos_in_line + ": "+  message);
-				this.t = t;
-			}
+		public SemanticException(Token t, String message) {
+			super("line " + t.line + " pos " + t.pos_in_line + ": " + message);
+			this.t = t;
+		}
 
-		}		
-		
+	}
 
-	
 	/**
-	 * The program name is only used for naming the class.  It does not rule out
-	 * variables with the same name.  It is returned for convenience.
+	 * The program name is only used for naming the class. It does not rule out
+	 * variables with the same name. It is returned for convenience.
 	 * 
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@Override
 	public Object visitProgram(Program program, Object arg) throws Exception {
-		for (ASTNode node: program.decsAndStatements) {
+		for (ASTNode node : program.decsAndStatements) {
 			node.visit(this, arg);
 		}
 		return program.name;
 	}
 
 	@Override
-	public Object visitDeclaration_Variable(
-			Declaration_Variable declaration_Variable, Object arg)
-			throws Exception {
+	public Object visitDeclaration_Variable(Declaration_Variable declaration_Variable, Object arg) throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object visitExpression_Binary(Expression_Binary expression_Binary,
-			Object arg) throws Exception {
+	public Object visitExpression_Binary(Expression_Binary expression_Binary, Object arg) throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object visitExpression_Unary(Expression_Unary expression_Unary,
-			Object arg) throws Exception {
+	public Object visitExpression_Unary(Expression_Unary expression_Unary, Object arg) throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
@@ -87,107 +80,92 @@ public class TypeCheckVisitor implements ASTVisitor {
 	}
 
 	@Override
-	public Object visitExpression_PixelSelector(
-			Expression_PixelSelector expression_PixelSelector, Object arg)
+	public Object visitExpression_PixelSelector(Expression_PixelSelector expression_PixelSelector, Object arg)
 			throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object visitExpression_Conditional(
-			Expression_Conditional expression_Conditional, Object arg)
+	public Object visitExpression_Conditional(Expression_Conditional expression_Conditional, Object arg)
 			throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object visitDeclaration_Image(Declaration_Image declaration_Image,
-			Object arg) throws Exception {
+	public Object visitDeclaration_Image(Declaration_Image declaration_Image, Object arg) throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object visitSource_StringLiteral(
-			Source_StringLiteral source_StringLiteral, Object arg)
+	public Object visitSource_StringLiteral(Source_StringLiteral source_StringLiteral, Object arg) throws Exception {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Object visitSource_CommandLineParam(Source_CommandLineParam source_CommandLineParam, Object arg)
 			throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object visitSource_CommandLineParam(
-			Source_CommandLineParam source_CommandLineParam, Object arg)
+	public Object visitSource_Ident(Source_Ident source_Ident, Object arg) throws Exception {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Object visitDeclaration_SourceSink(Declaration_SourceSink declaration_SourceSink, Object arg)
 			throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object visitSource_Ident(Source_Ident source_Ident, Object arg)
-			throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Object visitDeclaration_SourceSink(
-			Declaration_SourceSink declaration_SourceSink, Object arg)
-			throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Object visitExpression_IntLit(Expression_IntLit expression_IntLit,
-			Object arg) throws Exception {
+	public Object visitExpression_IntLit(Expression_IntLit expression_IntLit, Object arg) throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Object visitExpression_FunctionAppWithExprArg(
-			Expression_FunctionAppWithExprArg expression_FunctionAppWithExprArg,
-			Object arg) throws Exception {
+			Expression_FunctionAppWithExprArg expression_FunctionAppWithExprArg, Object arg) throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Object visitExpression_FunctionAppWithIndexArg(
-			Expression_FunctionAppWithIndexArg expression_FunctionAppWithIndexArg,
-			Object arg) throws Exception {
+			Expression_FunctionAppWithIndexArg expression_FunctionAppWithIndexArg, Object arg) throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object visitExpression_PredefinedName(
-			Expression_PredefinedName expression_PredefinedName, Object arg)
+	public Object visitExpression_PredefinedName(Expression_PredefinedName expression_PredefinedName, Object arg)
 			throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object visitStatement_Out(Statement_Out statement_Out, Object arg)
-			throws Exception {
+	public Object visitStatement_Out(Statement_Out statement_Out, Object arg) throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object visitStatement_In(Statement_In statement_In, Object arg)
-			throws Exception {
+	public Object visitStatement_In(Statement_In statement_In, Object arg) throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object visitStatement_Assign(Statement_Assign statement_Assign,
-			Object arg) throws Exception {
+	public Object visitStatement_Assign(Statement_Assign statement_Assign, Object arg) throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
@@ -199,30 +177,25 @@ public class TypeCheckVisitor implements ASTVisitor {
 	}
 
 	@Override
-	public Object visitSink_SCREEN(Sink_SCREEN sink_SCREEN, Object arg)
-			throws Exception {
+	public Object visitSink_SCREEN(Sink_SCREEN sink_SCREEN, Object arg) throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object visitSink_Ident(Sink_Ident sink_Ident, Object arg)
-			throws Exception {
+	public Object visitSink_Ident(Sink_Ident sink_Ident, Object arg) throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object visitExpression_BooleanLit(
-			Expression_BooleanLit expression_BooleanLit, Object arg)
-			throws Exception {
+	public Object visitExpression_BooleanLit(Expression_BooleanLit expression_BooleanLit, Object arg) throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Object visitExpression_Ident(Expression_Ident expression_Ident,
-			Object arg) throws Exception {
+	public Object visitExpression_Ident(Expression_Ident expression_Ident, Object arg) throws Exception {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
