@@ -1,6 +1,7 @@
 package cop5556fa17;
 
 import cop5556fa17.Scanner.Token;
+import cop5556fa17.TypeUtils.Type;
 import cop5556fa17.AST.ASTNode;
 import cop5556fa17.AST.ASTVisitor;
 import cop5556fa17.AST.Declaration_Image;
@@ -40,6 +41,8 @@ public class TypeCheckVisitor implements ASTVisitor {
 		}
 
 	}
+
+	SymbolTable symTab = new SymbolTable();
 
 	/**
 	 * The program name is only used for naming the class. It does not rule out
@@ -109,7 +112,13 @@ public class TypeCheckVisitor implements ASTVisitor {
 	public Object visitSource_CommandLineParam(Source_CommandLineParam source_CommandLineParam, Object arg)
 			throws Exception {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		source_CommandLineParam.paramNum.visit(this, null);
+		source_CommandLineParam.nodeType = source_CommandLineParam.paramNum.nodeType;
+		if (source_CommandLineParam.nodeType != Type.INTEGER) {
+			String message = "Visit Source Command Line Parameter";
+			throw new SemanticException(source_CommandLineParam.firstToken, message);
+		}
+		return source_CommandLineParam;
 	}
 
 	@Override
