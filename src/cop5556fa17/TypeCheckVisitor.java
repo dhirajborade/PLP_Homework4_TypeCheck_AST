@@ -92,7 +92,20 @@ public class TypeCheckVisitor implements ASTVisitor {
 	@Override
 	public Object visitExpression_Unary(Expression_Unary expression_Unary, Object arg) throws Exception {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		expression_Unary.visit(this, null);
+		Type tempType = expression_Unary.e.nodeType;
+		if (expression_Unary.op == Kind.OP_EXCL && (tempType == Type.BOOLEAN || tempType == Type.INTEGER)) {
+			expression_Unary.nodeType = tempType;
+		} else if ((expression_Unary.op == Kind.OP_PLUS || expression_Unary.op == Kind.OP_MINUS) && tempType == Type.INTEGER) {
+			expression_Unary.nodeType = Type.INTEGER;
+		} else {
+			expression_Unary.nodeType = null;
+		}
+		if (expression_Unary.nodeType == null) {
+			String message = "Visit Unary Expression";
+			throw new SemanticException(expression_Unary.firstToken, message);
+		}
+		return expression_Unary;
 	}
 
 	@Override
