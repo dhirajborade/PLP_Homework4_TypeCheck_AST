@@ -67,7 +67,6 @@ public class TypeCheckVisitor implements ASTVisitor {
 
 	@Override
 	public Object visitExpression_Binary(Expression_Binary expression_Binary, Object arg) throws Exception {
-		// TODO Auto-generated method stub
 		expression_Binary.e0.visit(this, arg);
 		expression_Binary.e1.visit(this, arg);
 		if (expression_Binary.e0.nodeType == expression_Binary.e1.nodeType && expression_Binary.nodeType != null) {
@@ -91,7 +90,6 @@ public class TypeCheckVisitor implements ASTVisitor {
 
 	@Override
 	public Object visitExpression_Unary(Expression_Unary expression_Unary, Object arg) throws Exception {
-		// TODO Auto-generated method stub
 		expression_Unary.visit(this, null);
 		Type tempType = expression_Unary.e.nodeType;
 		if (expression_Unary.op == Kind.OP_EXCL && (tempType == Type.BOOLEAN || tempType == Type.INTEGER)) {
@@ -111,7 +109,15 @@ public class TypeCheckVisitor implements ASTVisitor {
 	@Override
 	public Object visitIndex(Index index, Object arg) throws Exception {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		index.e0.visit(this, arg);
+		index.e1.visit(this, arg);
+		if (index.e0.nodeType == Type.INTEGER && index.e1.nodeType == Type.INTEGER) {
+			index.setCartesian(!(index.e0.firstToken.kind == Kind.KW_r && index.e1.firstToken.kind == Kind.KW_a));
+		} else {
+			String message = "Visit Index";
+			throw new SemanticException(index.firstToken, message);
+		}
+		return index;
 	}
 
 	@Override
@@ -143,7 +149,6 @@ public class TypeCheckVisitor implements ASTVisitor {
 	@Override
 	public Object visitSource_CommandLineParam(Source_CommandLineParam source_CommandLineParam, Object arg)
 			throws Exception {
-		// TODO Auto-generated method stub
 		source_CommandLineParam.paramNum.visit(this, null);
 		source_CommandLineParam.nodeType = source_CommandLineParam.paramNum.nodeType;
 		if (source_CommandLineParam.nodeType != Type.INTEGER) {
@@ -155,7 +160,6 @@ public class TypeCheckVisitor implements ASTVisitor {
 
 	@Override
 	public Object visitSource_Ident(Source_Ident source_Ident, Object arg) throws Exception {
-		// TODO Auto-generated method stub
 		if (!symTab.lookupNode(source_Ident.name)) {
 			String message = "Visit Source Identifier";
 			throw new SemanticException(source_Ident.firstToken, message);
