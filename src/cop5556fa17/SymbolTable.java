@@ -54,7 +54,7 @@ public class SymbolTable {
 		}
 		return result;
 	}
-	
+
 	public Declaration getNode(String ident) {
 		Declaration decNode = null;
 		if (this.lookupNode(ident)) {

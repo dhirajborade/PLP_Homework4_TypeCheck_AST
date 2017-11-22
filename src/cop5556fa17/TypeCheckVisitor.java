@@ -1,5 +1,6 @@
 package cop5556fa17;
 
+import cop5556fa17.Scanner.Kind;
 import cop5556fa17.Scanner.Token;
 import cop5556fa17.TypeUtils.Type;
 import cop5556fa17.AST.ASTNode;
@@ -67,7 +68,25 @@ public class TypeCheckVisitor implements ASTVisitor {
 	@Override
 	public Object visitExpression_Binary(Expression_Binary expression_Binary, Object arg) throws Exception {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		expression_Binary.e0.visit(this, arg);
+		expression_Binary.e1.visit(this, arg);
+		if (expression_Binary.e0.nodeType == expression_Binary.e1.nodeType && expression_Binary.nodeType != null) {
+			if (expression_Binary.op == Kind.OP_EQ || expression_Binary.op == Kind.OP_NEQ) {
+				expression_Binary.nodeType = Type.BOOLEAN;
+			} else if ((expression_Binary.op == Kind.OP_GE || expression_Binary.op == Kind.OP_GT || expression_Binary.op == Kind.OP_LE || expression_Binary.op == Kind.OP_LT) && expression_Binary.e0.nodeType == Type.INTEGER) {
+				expression_Binary.nodeType = Type.BOOLEAN;
+			} else if ((expression_Binary.op == Kind.OP_AND || expression_Binary.op == Kind.OP_OR) && (expression_Binary.e0.nodeType == Type.INTEGER || expression_Binary.e0.nodeType == Type.BOOLEAN)) {
+				expression_Binary.nodeType = expression_Binary.e0.nodeType;
+			} else if ((expression_Binary.op == Kind.OP_DIV || expression_Binary.op == Kind.OP_MINUS || expression_Binary.op == Kind.OP_MOD || expression_Binary.op == Kind.OP_PLUS || expression_Binary.op == Kind.OP_POWER || expression_Binary.op == Kind.OP_TIMES) && expression_Binary.e0.nodeType == Type.INTEGER) {
+				expression_Binary.nodeType = Type.INTEGER;
+			} else {
+				expression_Binary.nodeType = null;
+			}
+		} else {
+			String message = "Visit Binary Expression";
+			throw new SemanticException(expression_Binary.firstToken, message);
+		}
+		return expression_Binary;
 	}
 
 	@Override
