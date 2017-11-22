@@ -124,7 +124,16 @@ public class TypeCheckVisitor implements ASTVisitor {
 	@Override
 	public Object visitSource_Ident(Source_Ident source_Ident, Object arg) throws Exception {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		if (symTab.lookupNode(source_Ident.name) == null) {
+			String message = "Visit Source Identifier";
+			throw new SemanticException(source_Ident.firstToken, message);
+		}
+		source_Ident.nodeType = symTab.lookupNode(source_Ident.name).nodeType;
+		if (source_Ident.nodeType != Type.FILE ||source_Ident.nodeType != Type.URL) {
+			String message = "Source Ident Type in Visit Source Identifier is not a File or URL";
+			throw new SemanticException(source_Ident.firstToken, message);
+		}
+		return source_Ident;
 	}
 
 	@Override
