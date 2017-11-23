@@ -1,9 +1,12 @@
 package cop5556fa17;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+
 import cop5556fa17.Scanner.Kind;
 import cop5556fa17.Scanner.Token;
 import cop5556fa17.TypeUtils.Type;
-
 import cop5556fa17.AST.ASTNode;
 import cop5556fa17.AST.ASTVisitor;
 import cop5556fa17.AST.Declaration;
@@ -187,7 +190,8 @@ public class TypeCheckVisitor implements ASTVisitor {
 		if (expression_Conditional.falseExpression != null) {
 			expression_Conditional.falseExpression.visit(this, arg);
 		}
-		if (expression_Conditional.condition.nodeType == Type.BOOLEAN && expression_Conditional.trueExpression.nodeType == expression_Conditional.falseExpression.nodeType) {
+		if (expression_Conditional.condition.nodeType == Type.BOOLEAN
+				&& expression_Conditional.trueExpression.nodeType == expression_Conditional.falseExpression.nodeType) {
 			expression_Conditional.nodeType = expression_Conditional.trueExpression.nodeType;
 		} else {
 			String message = "Visit Conditional Expression";
@@ -199,13 +203,45 @@ public class TypeCheckVisitor implements ASTVisitor {
 	@Override
 	public Object visitDeclaration_Image(Declaration_Image declaration_Image, Object arg) throws Exception {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		if (declaration_Image.source != null) {
+			declaration_Image.source.visit(this, null);
+		}
+		if (declaration_Image.xSize != null) {
+			declaration_Image.xSize.visit(this, null);
+		}
+		if (declaration_Image.ySize != null) {
+			declaration_Image.ySize.visit(this, null);
+		}
+		if (symTab.lookupNode(declaration_Image.name)) {
+			String message = "Visit Image Declaration";
+			throw new SemanticException(declaration_Image.firstToken, message);
+		}
+		symTab.insertNode(declaration_Image.name, declaration_Image);
+		declaration_Image.nodeType = Type.IMAGE;
+
+		if (declaration_Image.xSize != null) {
+			if (declaration_Image.ySize != null && declaration_Image.xSize.nodeType == Type.INTEGER
+					&& declaration_Image.ySize.nodeType == Type.INTEGER) {
+
+			} else {
+				String message = "Visit Image Declaration";
+				throw new SemanticException(declaration_Image.firstToken, message);
+			}
+		}
+		return declaration_Image;
 	}
 
 	@Override
 	public Object visitSource_StringLiteral(Source_StringLiteral source_StringLiteral, Object arg) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		try {
+			new URL(source_StringLiteral.fileOrUrl).toURI();
+			source_StringLiteral.nodeType = Type.URL;
+		} catch (URISyntaxException exception) {
+			source_StringLiteral.nodeType = Type.FILE;
+		} catch (MalformedURLException exception) {
+			source_StringLiteral.nodeType = Type.FILE;
+		}
+		return source_StringLiteral;
 	}
 
 	@Override
