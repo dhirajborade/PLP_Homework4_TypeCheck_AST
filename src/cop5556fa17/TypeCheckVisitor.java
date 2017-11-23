@@ -408,14 +408,23 @@ public class TypeCheckVisitor implements ASTVisitor {
 
 	@Override
 	public Object visitSink_SCREEN(Sink_SCREEN sink_SCREEN, Object arg) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		sink_SCREEN.nodeType = Type.SCREEN;
+		return sink_SCREEN;
 	}
 
 	@Override
 	public Object visitSink_Ident(Sink_Ident sink_Ident, Object arg) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		if (!symTab.lookupNode(sink_Ident.name)) {
+			String message = "Visit Sink Ident not found in Symbol Table";
+			throw new SemanticException(sink_Ident.firstToken, message);
+		}
+		if (sink_Ident.nodeType == Type.FILE) {
+			sink_Ident.nodeType = symTab.getNode(sink_Ident.name).nodeType;
+		} else {
+			String message = "Visit Sink Ident";
+			throw new SemanticException(sink_Ident.firstToken, message);
+		}
+		return sink_Ident;
 	}
 
 	@Override
