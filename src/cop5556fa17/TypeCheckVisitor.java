@@ -247,7 +247,9 @@ public class TypeCheckVisitor implements ASTVisitor {
 	@Override
 	public Object visitSource_CommandLineParam(Source_CommandLineParam source_CommandLineParam, Object arg)
 			throws Exception {
-		source_CommandLineParam.paramNum.visit(this, null);
+		if (source_CommandLineParam.paramNum != null) {
+			source_CommandLineParam.paramNum.visit(this, null);
+		}
 		source_CommandLineParam.nodeType = source_CommandLineParam.paramNum.nodeType;
 		if (source_CommandLineParam.nodeType != Type.INTEGER) {
 			String message = "Visit Source Command Line Parameter";
@@ -273,14 +275,34 @@ public class TypeCheckVisitor implements ASTVisitor {
 	@Override
 	public Object visitDeclaration_SourceSink(Declaration_SourceSink declaration_SourceSink, Object arg)
 			throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		String message = "Visit Source Sink Declaration";
+		if (declaration_SourceSink.source != null) {
+			declaration_SourceSink.source.visit(this, null);
+		}
+		if (symTab.lookupNode(declaration_SourceSink.name)) {
+			throw new SemanticException(declaration_SourceSink.firstToken, message);
+		}
+		symTab.insertNode(declaration_SourceSink.name, declaration_SourceSink);
+		switch (declaration_SourceSink.type) {
+		case KW_file:
+			declaration_SourceSink.nodeType = Type.FILE;
+			break;
+		case KW_url:
+			declaration_SourceSink.nodeType = Type.URL;
+			break;
+		default:
+			throw new SemanticException(declaration_SourceSink.firstToken, message);
+		}
+		if (declaration_SourceSink.nodeType != declaration_SourceSink.source.nodeType) {
+			throw new SemanticException(declaration_SourceSink.firstToken, message);
+		}
+		return declaration_SourceSink;
 	}
 
 	@Override
 	public Object visitExpression_IntLit(Expression_IntLit expression_IntLit, Object arg) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		expression_IntLit.nodeType = Type.INTEGER;
+		return expression_IntLit;
 	}
 
 	@Override
