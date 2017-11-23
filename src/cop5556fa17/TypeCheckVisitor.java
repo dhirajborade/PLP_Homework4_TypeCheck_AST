@@ -5,6 +5,7 @@ import cop5556fa17.Scanner.Token;
 import cop5556fa17.TypeUtils.Type;
 import cop5556fa17.AST.ASTNode;
 import cop5556fa17.AST.ASTVisitor;
+import cop5556fa17.AST.Declaration;
 import cop5556fa17.AST.Declaration_Image;
 import cop5556fa17.AST.Declaration_SourceSink;
 import cop5556fa17.AST.Declaration_Variable;
@@ -81,8 +82,12 @@ public class TypeCheckVisitor implements ASTVisitor {
 
 	@Override
 	public Object visitExpression_Binary(Expression_Binary expression_Binary, Object arg) throws Exception {
-		expression_Binary.e0.visit(this, arg);
-		expression_Binary.e1.visit(this, arg);
+		if (expression_Binary.e0 != null) {
+			expression_Binary.e0.visit(this, arg);
+		}
+		if (expression_Binary.e1 != null) {
+			expression_Binary.e1.visit(this, arg);
+		}
 		if (expression_Binary.e0.nodeType == expression_Binary.e1.nodeType && expression_Binary.nodeType != null) {
 			if (expression_Binary.op == Kind.OP_EQ || expression_Binary.op == Kind.OP_NEQ) {
 				expression_Binary.nodeType = Type.BOOLEAN;
@@ -111,7 +116,9 @@ public class TypeCheckVisitor implements ASTVisitor {
 
 	@Override
 	public Object visitExpression_Unary(Expression_Unary expression_Unary, Object arg) throws Exception {
-		expression_Unary.visit(this, null);
+		if (expression_Unary.e != null) {
+			expression_Unary.visit(this, null);
+		}
 		Type tempType = expression_Unary.e.nodeType;
 		if (expression_Unary.op == Kind.OP_EXCL && (tempType == Type.BOOLEAN || tempType == Type.INTEGER)) {
 			expression_Unary.nodeType = tempType;
@@ -131,8 +138,12 @@ public class TypeCheckVisitor implements ASTVisitor {
 	@Override
 	public Object visitIndex(Index index, Object arg) throws Exception {
 		// TODO Auto-generated method stub
-		index.e0.visit(this, arg);
-		index.e1.visit(this, arg);
+		if (index.e0 != null) {
+			index.e0.visit(this, arg);
+		}
+		if (index.e1 != null) {
+			index.e1.visit(this, arg);
+		}
 		if (index.e0.nodeType == Type.INTEGER && index.e1.nodeType == Type.INTEGER) {
 			index.setCartesian(!(index.e0.firstToken.kind == Kind.KW_r && index.e1.firstToken.kind == Kind.KW_a));
 		} else {
@@ -145,8 +156,22 @@ public class TypeCheckVisitor implements ASTVisitor {
 	@Override
 	public Object visitExpression_PixelSelector(Expression_PixelSelector expression_PixelSelector, Object arg)
 			throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		if (expression_PixelSelector.index != null) {
+			expression_PixelSelector.index.visit(this, null);
+		}
+		Declaration tempDec = symTab.getNode(expression_PixelSelector.name);
+		if (tempDec.nodeType == Type.IMAGE) {
+			expression_PixelSelector.nodeType = Type.INTEGER;
+		} else if (expression_PixelSelector.index == null) {
+			expression_PixelSelector.nodeType = tempDec.nodeType;
+		} else {
+			expression_PixelSelector.nodeType = null;
+		}
+		if (expression_PixelSelector.nodeType == null) {
+			String message = "Visit Pixel Selector Expression";
+			throw new SemanticException(expression_PixelSelector.firstToken, message);
+		}
+		return expression_PixelSelector;
 	}
 
 	@Override
