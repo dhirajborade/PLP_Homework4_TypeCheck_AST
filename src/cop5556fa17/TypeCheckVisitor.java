@@ -308,8 +308,16 @@ public class TypeCheckVisitor implements ASTVisitor {
 	@Override
 	public Object visitExpression_FunctionAppWithExprArg(
 			Expression_FunctionAppWithExprArg expression_FunctionAppWithExprArg, Object arg) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		if (expression_FunctionAppWithExprArg.arg != null) {
+			expression_FunctionAppWithExprArg.arg.visit(this, null);
+		}
+		if (expression_FunctionAppWithExprArg.arg.nodeType != Type.INTEGER) {
+			String message = "Visit Function Application with Expression Argument";
+			throw new SemanticException(expression_FunctionAppWithExprArg.firstToken, message);
+		} else {
+			expression_FunctionAppWithExprArg.nodeType = Type.INTEGER;
+		}
+		return expression_FunctionAppWithExprArg;
 	}
 
 	@Override
