@@ -92,26 +92,24 @@ public class TypeCheckVisitor implements ASTVisitor {
 		if (expression_Binary.e1 != null) {
 			expression_Binary.e1.visit(this, arg);
 		}
-		if (expression_Binary.e0.nodeType == expression_Binary.e1.nodeType && expression_Binary.nodeType != null) {
-			if (expression_Binary.op == Kind.OP_EQ || expression_Binary.op == Kind.OP_NEQ) {
-				expression_Binary.nodeType = Type.BOOLEAN;
-			} else if ((expression_Binary.op == Kind.OP_GE || expression_Binary.op == Kind.OP_GT
-					|| expression_Binary.op == Kind.OP_LE || expression_Binary.op == Kind.OP_LT)
-					&& expression_Binary.e0.nodeType == Type.INTEGER) {
-				expression_Binary.nodeType = Type.BOOLEAN;
-			} else if ((expression_Binary.op == Kind.OP_AND || expression_Binary.op == Kind.OP_OR)
-					&& (expression_Binary.e0.nodeType == Type.INTEGER
-							|| expression_Binary.e0.nodeType == Type.BOOLEAN)) {
-				expression_Binary.nodeType = expression_Binary.e0.nodeType;
-			} else if ((expression_Binary.op == Kind.OP_DIV || expression_Binary.op == Kind.OP_MINUS
-					|| expression_Binary.op == Kind.OP_MOD || expression_Binary.op == Kind.OP_PLUS
-					|| expression_Binary.op == Kind.OP_POWER || expression_Binary.op == Kind.OP_TIMES)
-					&& expression_Binary.e0.nodeType == Type.INTEGER) {
-				expression_Binary.nodeType = Type.INTEGER;
-			} else {
-				expression_Binary.nodeType = null;
-			}
+		if (expression_Binary.op == Kind.OP_EQ || expression_Binary.op == Kind.OP_NEQ) {
+			expression_Binary.nodeType = Type.BOOLEAN;
+		} else if ((expression_Binary.op == Kind.OP_GE || expression_Binary.op == Kind.OP_GT
+				|| expression_Binary.op == Kind.OP_LE || expression_Binary.op == Kind.OP_LT)
+				&& expression_Binary.e0.nodeType == Type.INTEGER) {
+			expression_Binary.nodeType = Type.BOOLEAN;
+		} else if ((expression_Binary.op == Kind.OP_AND || expression_Binary.op == Kind.OP_OR)
+				&& (expression_Binary.e0.nodeType == Type.INTEGER || expression_Binary.e0.nodeType == Type.BOOLEAN)) {
+			expression_Binary.nodeType = expression_Binary.e0.nodeType;
+		} else if ((expression_Binary.op == Kind.OP_DIV || expression_Binary.op == Kind.OP_MINUS
+				|| expression_Binary.op == Kind.OP_MOD || expression_Binary.op == Kind.OP_PLUS
+				|| expression_Binary.op == Kind.OP_POWER || expression_Binary.op == Kind.OP_TIMES)
+				&& expression_Binary.e0.nodeType == Type.INTEGER) {
+			expression_Binary.nodeType = Type.INTEGER;
 		} else {
+			expression_Binary.nodeType = null;
+		}
+		if (!(expression_Binary.e0.nodeType == expression_Binary.e1.nodeType && expression_Binary.nodeType != null)) {
 			String message = "Visit Binary Expression";
 			throw new SemanticException(expression_Binary.firstToken, message);
 		}
@@ -202,7 +200,6 @@ public class TypeCheckVisitor implements ASTVisitor {
 
 	@Override
 	public Object visitDeclaration_Image(Declaration_Image declaration_Image, Object arg) throws Exception {
-		// TODO Auto-generated method stub
 		if (declaration_Image.source != null) {
 			declaration_Image.source.visit(this, null);
 		}
@@ -220,10 +217,8 @@ public class TypeCheckVisitor implements ASTVisitor {
 		declaration_Image.nodeType = Type.IMAGE;
 
 		if (declaration_Image.xSize != null) {
-			if (declaration_Image.ySize != null && declaration_Image.xSize.nodeType == Type.INTEGER
-					&& declaration_Image.ySize.nodeType == Type.INTEGER) {
-
-			} else {
+			if (!(declaration_Image.ySize != null && declaration_Image.xSize.nodeType == Type.INTEGER
+					&& declaration_Image.ySize.nodeType == Type.INTEGER)) {
 				String message = "Visit Image Declaration";
 				throw new SemanticException(declaration_Image.firstToken, message);
 			}
@@ -265,7 +260,7 @@ public class TypeCheckVisitor implements ASTVisitor {
 			throw new SemanticException(source_Ident.firstToken, message);
 		}
 		source_Ident.nodeType = symTab.getNode(source_Ident.name).nodeType;
-		if (source_Ident.nodeType != Type.FILE || source_Ident.nodeType != Type.URL) {
+		if (!(source_Ident.nodeType == Type.FILE || source_Ident.nodeType == Type.URL)) {
 			String message = "Source Ident Type in Visit Source Identifier is not a File or URL";
 			throw new SemanticException(source_Ident.firstToken, message);
 		}
@@ -343,7 +338,7 @@ public class TypeCheckVisitor implements ASTVisitor {
 		if (statement_Out.sink != null) {
 			statement_Out.sink.visit(this, null);
 		}
-		if (symTab.lookupNode(statement_Out.name)) {
+		if (!symTab.lookupNode(statement_Out.name)) {
 			throw new SemanticException(statement_Out.firstToken, message);
 		}
 		Declaration name = symTab.getNode(statement_Out.name);
@@ -429,14 +424,19 @@ public class TypeCheckVisitor implements ASTVisitor {
 
 	@Override
 	public Object visitExpression_BooleanLit(Expression_BooleanLit expression_BooleanLit, Object arg) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		expression_BooleanLit.nodeType = Type.BOOLEAN;
+		return expression_BooleanLit;
 	}
 
 	@Override
 	public Object visitExpression_Ident(Expression_Ident expression_Ident, Object arg) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		String message = "Visit Expression Identifier";
+		if (symTab.lookupNode(expression_Ident.name)) {
+			expression_Ident.nodeType = symTab.getNode(expression_Ident.name).nodeType;
+		} else {
+			throw new SemanticException(expression_Ident.firstToken, message);
+		}
+		return expression_Ident;
 	}
 
 }
