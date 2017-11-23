@@ -323,21 +323,40 @@ public class TypeCheckVisitor implements ASTVisitor {
 	@Override
 	public Object visitExpression_FunctionAppWithIndexArg(
 			Expression_FunctionAppWithIndexArg expression_FunctionAppWithIndexArg, Object arg) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		if (expression_FunctionAppWithIndexArg.arg != null) {
+			expression_FunctionAppWithIndexArg.arg.visit(this, arg);
+		}
+		expression_FunctionAppWithIndexArg.nodeType = Type.INTEGER;
+		return expression_FunctionAppWithIndexArg;
 	}
 
 	@Override
 	public Object visitExpression_PredefinedName(Expression_PredefinedName expression_PredefinedName, Object arg)
 			throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		expression_PredefinedName.nodeType = Type.INTEGER;
+		return expression_PredefinedName;
 	}
 
 	@Override
 	public Object visitStatement_Out(Statement_Out statement_Out, Object arg) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		String message = "Visit Statement Out";
+		if (statement_Out.sink != null) {
+			statement_Out.sink.visit(this, null);
+		}
+		if (symTab.lookupNode(statement_Out.name)) {
+			throw new SemanticException(statement_Out.firstToken, message);
+		}
+		Declaration name = symTab.getNode(statement_Out.name);
+
+		if (((name.nodeType == Type.INTEGER || name.nodeType == Type.BOOLEAN)
+				&& statement_Out.sink.nodeType == Type.SCREEN)
+				|| (name.nodeType == Type.IMAGE
+						&& (statement_Out.sink.nodeType == Type.FILE || statement_Out.sink.nodeType == Type.SCREEN))) {
+			statement_Out.setDec(name);
+		} else {
+			throw new SemanticException(statement_Out.firstToken, message);
+		}
+		return statement_Out;
 	}
 
 	@Override
