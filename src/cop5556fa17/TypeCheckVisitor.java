@@ -3,6 +3,7 @@ package cop5556fa17;
 import cop5556fa17.Scanner.Kind;
 import cop5556fa17.Scanner.Token;
 import cop5556fa17.TypeUtils.Type;
+
 import cop5556fa17.AST.ASTNode;
 import cop5556fa17.AST.ASTVisitor;
 import cop5556fa17.AST.Declaration;
@@ -177,8 +178,22 @@ public class TypeCheckVisitor implements ASTVisitor {
 	@Override
 	public Object visitExpression_Conditional(Expression_Conditional expression_Conditional, Object arg)
 			throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		if (expression_Conditional.condition != null) {
+			expression_Conditional.condition.visit(this, arg);
+		}
+		if (expression_Conditional.trueExpression != null) {
+			expression_Conditional.trueExpression.visit(this, arg);
+		}
+		if (expression_Conditional.falseExpression != null) {
+			expression_Conditional.falseExpression.visit(this, arg);
+		}
+		if (expression_Conditional.condition.nodeType == Type.BOOLEAN && expression_Conditional.trueExpression.nodeType == expression_Conditional.falseExpression.nodeType) {
+			expression_Conditional.nodeType = expression_Conditional.trueExpression.nodeType;
+		} else {
+			String message = "Visit Conditional Expression";
+			throw new SemanticException(expression_Conditional.firstToken, message);
+		}
+		return expression_Conditional;
 	}
 
 	@Override
