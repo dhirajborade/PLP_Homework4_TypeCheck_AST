@@ -287,7 +287,7 @@ public class Parser {
 		firstToken = t;
 		kind = t.kind;
 		Expression e1 = new Expression_PredefinedName(firstToken, kind);
-		matchToken(KW_A);
+		matchToken(KW_a);
 		return new Index(firstToken, e0, e1);
 	}
 
