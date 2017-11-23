@@ -4,11 +4,11 @@ import cop5556fa17.Scanner.Kind;
 import cop5556fa17.Scanner.Token;
 
 public class Declaration_SourceSink extends Declaration {
-	
+
 	public final Kind type;
 	public final String name;
 	public final Source source;
-	
+
 	public Declaration_SourceSink(Token firstToken, Token type, Token name, Source source) {
 		super(firstToken);
 		this.type = type.kind;
@@ -16,14 +16,10 @@ public class Declaration_SourceSink extends Declaration {
 		this.source = source;
 	}
 
-
 	@Override
 	public Object visit(ASTVisitor v, Object arg) throws Exception {
-		return v.visitDeclaration_SourceSink(this,arg);
+		return v.visitDeclaration_SourceSink(this, arg);
 	}
-
-
-
 
 	@Override
 	public int hashCode() {
@@ -34,7 +30,6 @@ public class Declaration_SourceSink extends Declaration {
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -60,14 +55,9 @@ public class Declaration_SourceSink extends Declaration {
 		return true;
 	}
 
-
 	@Override
 	public String toString() {
 		return "Declaration_SourceSink [type=" + type + ", name=" + name + ", source=" + source + "]";
 	}
 
-
-
-
-	
 }

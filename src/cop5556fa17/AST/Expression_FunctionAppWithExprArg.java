@@ -4,10 +4,10 @@ import cop5556fa17.Scanner.Kind;
 import cop5556fa17.Scanner.Token;
 
 public class Expression_FunctionAppWithExprArg extends Expression_FunctionApp {
-	
+
 	public final Kind function;
 	public final Expression arg;
-	
+
 	public Expression_FunctionAppWithExprArg(Token firstToken, Kind function, Expression arg) {
 		super(firstToken);
 		this.function = function;
@@ -16,7 +16,7 @@ public class Expression_FunctionAppWithExprArg extends Expression_FunctionApp {
 
 	@Override
 	public Object visit(ASTVisitor v, Object arg) throws Exception {
-		return v.visitExpression_FunctionAppWithExprArg(this,arg); 
+		return v.visitExpression_FunctionAppWithExprArg(this, arg);
 	}
 
 	@Override
@@ -57,7 +57,5 @@ public class Expression_FunctionAppWithExprArg extends Expression_FunctionApp {
 		builder.append("]");
 		return builder.toString();
 	}
-
-
 
 }

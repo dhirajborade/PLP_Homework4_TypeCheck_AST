@@ -6,11 +6,17 @@ public class Statement_Out extends Statement {
 
 	public final String name;
 	public final Sink sink;
-	
-	Declaration dec;  //declaration for name.  Set during type checking
-	public void setDec(Declaration dec) {this.dec = dec;}
-	public Declaration getDec() {return dec;}
-	
+
+	Declaration dec; // declaration for name. Set during type checking
+
+	public void setDec(Declaration dec) {
+		this.dec = dec;
+	}
+
+	public Declaration getDec() {
+		return dec;
+	}
+
 	public Statement_Out(Token firstToken, Token name, Sink sink) {
 		super(firstToken);
 		this.name = name.getText();
@@ -57,9 +63,5 @@ public class Statement_Out extends Statement {
 	public String toString() {
 		return "Statement_Out [name=" + name + ", sink=" + sink + "]";
 	}
-
-
-	
-	
 
 }

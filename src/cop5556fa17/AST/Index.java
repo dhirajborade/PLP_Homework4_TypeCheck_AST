@@ -3,37 +3,31 @@ package cop5556fa17.AST;
 import cop5556fa17.Scanner.Token;
 
 public class Index extends ASTNode {
-	
-	public static final Index defaultIndex = null; //TODO fix this
+
+	public static final Index defaultIndex = null; // TODO fix this
 
 	public final Expression e0;
 	public final Expression e1;
-	
+
 	boolean isCartesian;
-	
+
 	public Index(Token firstToken, Expression e0, Expression e1) {
 		super(firstToken);
 		this.e0 = e0;
 		this.e1 = e1;
 	}
-	
-	
 
 	public boolean isCartesian() {
 		return isCartesian;
 	}
 
-
-
 	public void setCartesian(boolean isCartesian) {
 		this.isCartesian = isCartesian;
 	}
 
-
-
 	@Override
 	public Object visit(ASTVisitor v, Object arg) throws Exception {
-		return v.visitIndex(this,arg);
+		return v.visitIndex(this, arg);
 	}
 
 	@Override
@@ -77,7 +71,5 @@ public class Index extends ASTNode {
 		builder.append("]");
 		return builder.toString();
 	}
-	
-	
 
 }

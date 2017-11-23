@@ -3,7 +3,7 @@ package cop5556fa17.AST;
 import cop5556fa17.Scanner.Token;
 
 public class Source_StringLiteral extends Source {
-	
+
 	public final String fileOrUrl;
 
 	public Source_StringLiteral(Token firstToken, String fileOrUrl) {
@@ -13,7 +13,7 @@ public class Source_StringLiteral extends Source {
 
 	@Override
 	public Object visit(ASTVisitor v, Object arg) throws Exception {
-		return v.visitSource_StringLiteral(this,arg);
+		return v.visitSource_StringLiteral(this, arg);
 	}
 
 	@Override
@@ -49,8 +49,5 @@ public class Source_StringLiteral extends Source {
 		builder.append("]");
 		return builder.toString();
 	}
-
-
-	
 
 }

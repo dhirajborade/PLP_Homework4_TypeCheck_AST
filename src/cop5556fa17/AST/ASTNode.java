@@ -3,9 +3,9 @@ package cop5556fa17.AST;
 import cop5556fa17.Scanner.Token;
 
 public abstract class ASTNode {
-	
+
 	final public Token firstToken;
-	
+
 	public ASTNode(Token firstToken) {
 		super();
 		this.firstToken = firstToken;
@@ -37,8 +37,5 @@ public abstract class ASTNode {
 			return false;
 		return true;
 	}
-	
-	
+
 }
-
-

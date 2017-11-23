@@ -3,14 +3,13 @@ package cop5556fa17.AST;
 import cop5556fa17.Scanner.Token;
 
 public class Declaration_Image extends Declaration {
-	
+
 	public final Expression xSize;
 	public final Expression ySize;
 	public final String name;
 	public final Source source;
 
-	public Declaration_Image(Token firstToken, Expression xSize, Expression ySize, Token name,
-			Source source) {
+	public Declaration_Image(Token firstToken, Expression xSize, Expression ySize, Token name, Source source) {
 		super(firstToken);
 		this.xSize = xSize;
 		this.ySize = ySize;
@@ -81,7 +80,4 @@ public class Declaration_Image extends Declaration {
 		return builder.toString();
 	}
 
-
-
-	
 }

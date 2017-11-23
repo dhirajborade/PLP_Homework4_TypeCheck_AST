@@ -4,10 +4,9 @@ import cop5556fa17.Scanner.Kind;
 import cop5556fa17.Scanner.Token;
 import static cop5556fa17.Scanner.Kind.*;
 
-
 public class Sink_SCREEN extends Sink {
-	
-	public final Kind kind;  //this is just here to allow generated hashcode, equals, and toString
+
+	public final Kind kind; // this is just here to allow generated hashcode, equals, and toString
 
 	public Sink_SCREEN(Token firstToken) {
 		super(firstToken);
@@ -45,7 +44,5 @@ public class Sink_SCREEN extends Sink {
 	public String toString() {
 		return "Sink_SCREEN [kind=" + kind + "]";
 	}
-	
-	
 
 }

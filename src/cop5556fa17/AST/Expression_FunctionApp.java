@@ -6,7 +6,7 @@ public abstract class Expression_FunctionApp extends Expression {
 
 	public Expression_FunctionApp(Token firstToken) {
 		super(firstToken);
-		
+
 	}
 
 }

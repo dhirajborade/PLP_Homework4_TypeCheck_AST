@@ -3,9 +3,9 @@ package cop5556fa17.AST;
 import cop5556fa17.Scanner.Token;
 
 public class Sink_Ident extends Sink {
-	
+
 	public final String name;
-	
+
 	public Sink_Ident(Token firstToken, Token name) {
 		super(firstToken);
 		this.name = name.getText();
@@ -13,7 +13,7 @@ public class Sink_Ident extends Sink {
 
 	@Override
 	public Object visit(ASTVisitor v, Object arg) throws Exception {
-		return v.visitSink_Ident(this,arg);
+		return v.visitSink_Ident(this, arg);
 	}
 
 	@Override
@@ -46,5 +46,4 @@ public class Sink_Ident extends Sink {
 		return "Sink_Ident [name=" + name + "]";
 	}
 
-	
 }

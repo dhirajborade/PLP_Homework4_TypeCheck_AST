@@ -4,13 +4,13 @@ import cop5556fa17.Scanner.Kind;
 import cop5556fa17.Scanner.Token;
 
 public class Expression_FunctionAppWithIndexArg extends Expression_FunctionApp {
-	
+
 	public final Kind function;
 	public final Index arg;
 
 	@Override
 	public Object visit(ASTVisitor v, Object arg) throws Exception {
-		return v.visitExpression_FunctionAppWithIndexArg(this,arg); 
+		return v.visitExpression_FunctionAppWithIndexArg(this, arg);
 	}
 
 	public Expression_FunctionAppWithIndexArg(Token firstToken, Kind function, Index arg) {
@@ -57,7 +57,5 @@ public class Expression_FunctionAppWithIndexArg extends Expression_FunctionApp {
 		builder.append("]");
 		return builder.toString();
 	}
-
-
 
 }

@@ -54,24 +54,18 @@ package cop5556fa17.AST;
 import cop5556fa17.Scanner.Token;
 
 public class Expression_Ident extends Expression {
-	
+
 	public final String name;
-	
-	
 
 	public Expression_Ident(Token firstToken, Token ident) {
 		super(firstToken);
 		this.name = ident.getText();
 	}
 
-
-
 	@Override
 	public Object visit(ASTVisitor v, Object arg) throws Exception {
 		return v.visitExpression_Ident(this, arg);
 	}
-
-
 
 	@Override
 	public int hashCode() {
@@ -80,8 +74,6 @@ public class Expression_Ident extends Expression {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
-
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -100,12 +92,9 @@ public class Expression_Ident extends Expression {
 		return true;
 	}
 
-
-
 	@Override
 	public String toString() {
 		return "Expression_Ident [name=" + name + "]";
 	}
 
-	
 }

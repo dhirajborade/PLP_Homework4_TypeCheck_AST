@@ -17,7 +17,7 @@ public class Expression_Binary extends Expression {
 
 	@Override
 	public Object visit(ASTVisitor v, Object arg) throws Exception {
-		return v.visitExpression_Binary(this,arg);
+		return v.visitExpression_Binary(this, arg);
 	}
 
 	@Override
@@ -70,7 +70,4 @@ public class Expression_Binary extends Expression {
 		return builder.toString();
 	}
 
-
-
-	
 }

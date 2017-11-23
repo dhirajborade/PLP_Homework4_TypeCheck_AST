@@ -3,10 +3,10 @@ package cop5556fa17.AST;
 import cop5556fa17.Scanner.Token;
 
 public class Expression_PixelSelector extends Expression {
-	
+
 	public final String name;
 	public final Index index;
-	
+
 	boolean isCartesian;
 
 	public boolean isCartesian() {
@@ -25,7 +25,7 @@ public class Expression_PixelSelector extends Expression {
 
 	@Override
 	public Object visit(ASTVisitor v, Object arg) throws Exception {
-		return v.visitExpression_PixelSelector(this,arg);
+		return v.visitExpression_PixelSelector(this, arg);
 	}
 
 	@Override
@@ -70,5 +70,4 @@ public class Expression_PixelSelector extends Expression {
 		return builder.toString();
 	}
 
-	
 }

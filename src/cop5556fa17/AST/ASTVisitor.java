@@ -12,7 +12,8 @@ public interface ASTVisitor {
 
 	Object visitIndex(Index index, Object arg) throws Exception;
 
-	Object visitExpression_PixelSelector(Expression_PixelSelector expression_PixelSelector, Object arg) throws Exception;
+	Object visitExpression_PixelSelector(Expression_PixelSelector expression_PixelSelector, Object arg)
+			throws Exception;
 
 	Object visitExpression_Conditional(Expression_Conditional expression_Conditional, Object arg) throws Exception;
 
@@ -31,10 +32,11 @@ public interface ASTVisitor {
 	Object visitExpression_FunctionAppWithExprArg(Expression_FunctionAppWithExprArg expression_FunctionAppWithExprArg,
 			Object arg) throws Exception;
 
-	Object visitExpression_FunctionAppWithIndexArg(Expression_FunctionAppWithIndexArg expression_FunctionAppWithIndexArg,
-			Object arg) throws Exception;
+	Object visitExpression_FunctionAppWithIndexArg(
+			Expression_FunctionAppWithIndexArg expression_FunctionAppWithIndexArg, Object arg) throws Exception;
 
-	Object visitExpression_PredefinedName(Expression_PredefinedName expression_PredefinedName, Object arg) throws Exception;
+	Object visitExpression_PredefinedName(Expression_PredefinedName expression_PredefinedName, Object arg)
+			throws Exception;
 
 	Object visitStatement_Out(Statement_Out statement_Out, Object arg) throws Exception;;
 
@@ -52,5 +54,4 @@ public interface ASTVisitor {
 
 	Object visitExpression_Ident(Expression_Ident expression_Ident, Object arg) throws Exception;
 
-	
 }

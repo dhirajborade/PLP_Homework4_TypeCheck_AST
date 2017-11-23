@@ -4,8 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
-
 import cop5556fa17.Scanner.Kind;
 import cop5556fa17.Scanner.Token;
 import cop5556fa17.TypeUtils.Type;
@@ -378,14 +376,34 @@ public class TypeCheckVisitor implements ASTVisitor {
 
 	@Override
 	public Object visitStatement_Assign(Statement_Assign statement_Assign, Object arg) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		if (statement_Assign.lhs != null) {
+			statement_Assign.lhs.visit(this, null);
+		}
+		if (statement_Assign.e != null) {
+			statement_Assign.e.visit(this, null);
+		}
+		if (statement_Assign.lhs.nodeType == statement_Assign.e.nodeType) {
+			statement_Assign.setCartesian(statement_Assign.lhs.isCartesian);
+		} else {
+			String message = "Visit Statement Assignment";
+			throw new SemanticException(statement_Assign.firstToken, message);
+		}
+		return statement_Assign;
 	}
 
 	@Override
 	public Object visitLHS(LHS lhs, Object arg) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		String message = "Visit LHS";
+		if (lhs.index != null) {
+			lhs.index.visit(this, arg);
+		}
+		if (!symTab.lookupNode(lhs.name)) {
+			throw new SemanticException(lhs.firstToken, message);
+		}
+		lhs.declaration = symTab.getNode(lhs.name);
+		lhs.nodeType = lhs.declaration.nodeType;
+		lhs.isCartesian = lhs.index != null ? lhs.index.isCartesian() : false;
+		return lhs;
 	}
 
 	@Override

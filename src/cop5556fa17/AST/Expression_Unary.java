@@ -4,7 +4,7 @@ import cop5556fa17.Scanner.Kind;
 import cop5556fa17.Scanner.Token;
 
 public class Expression_Unary extends Expression {
-	
+
 	public final Kind op;
 	public final Expression e;
 
@@ -16,7 +16,7 @@ public class Expression_Unary extends Expression {
 
 	@Override
 	public Object visit(ASTVisitor v, Object arg) throws Exception {
-		return v.visitExpression_Unary(this,arg);
+		return v.visitExpression_Unary(this, arg);
 	}
 
 	@Override
@@ -60,7 +60,5 @@ public class Expression_Unary extends Expression {
 		builder.append("]");
 		return builder.toString();
 	}
-	
-	
 
 }

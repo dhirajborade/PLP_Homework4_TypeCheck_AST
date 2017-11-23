@@ -1,5 +1,4 @@
 
-
 package cop5556fa17.AST;
 
 import java.util.ArrayList;
@@ -7,22 +6,19 @@ import java.util.ArrayList;
 import cop5556fa17.Scanner.Token;
 
 public class Program extends ASTNode {
-	
+
 	public final String name;
 	public final ArrayList<ASTNode> decsAndStatements;
-	
 
-
-	
 	public Program(Token firstToken, Token name, ArrayList<ASTNode> decsAndStatements) {
 		super(firstToken);
-		this.name=name.getText();
-		this.decsAndStatements=decsAndStatements;
+		this.name = name.getText();
+		this.decsAndStatements = decsAndStatements;
 	}
 
 	@Override
-	public Object visit(ASTVisitor v, Object arg) throws Exception{
-		return v.visitProgram(this,arg);
+	public Object visit(ASTVisitor v, Object arg) throws Exception {
+		return v.visitProgram(this, arg);
 	}
 
 	@Override
@@ -67,9 +63,4 @@ public class Program extends ASTNode {
 		return builder.toString();
 	}
 
-
-
-
-
 }
-

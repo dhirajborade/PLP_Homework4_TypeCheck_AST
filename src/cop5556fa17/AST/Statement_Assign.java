@@ -3,32 +3,25 @@ package cop5556fa17.AST;
 import cop5556fa17.Scanner.Token;
 
 public class Statement_Assign extends Statement {
-	
+
 	public final LHS lhs;
 	public final Expression e;
-	
+
 	boolean isCartesian;
-	
 
 	public Statement_Assign(Token firstToken, LHS lhs, Expression e) {
 		super(firstToken);
 		this.lhs = lhs;
 		this.e = e;
 	}
-	
-	
 
 	public boolean isCartesian() {
 		return isCartesian;
 	}
 
-
-
 	public void setCartesian(boolean isCartesian) {
 		this.isCartesian = isCartesian;
 	}
-
-
 
 	@Override
 	public Object visit(ASTVisitor v, Object arg) throws Exception {
@@ -76,7 +69,5 @@ public class Statement_Assign extends Statement {
 		builder.append("]");
 		return builder.toString();
 	}
-	
-	
 
 }
