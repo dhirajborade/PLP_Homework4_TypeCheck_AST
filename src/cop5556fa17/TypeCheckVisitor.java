@@ -4,6 +4,8 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
+
 import cop5556fa17.Scanner.Kind;
 import cop5556fa17.Scanner.Token;
 import cop5556fa17.TypeUtils.Type;
@@ -361,8 +363,17 @@ public class TypeCheckVisitor implements ASTVisitor {
 
 	@Override
 	public Object visitStatement_In(Statement_In statement_In, Object arg) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		String message = "Visit Statement In";
+		if (statement_In.source != null) {
+			statement_In.source.visit(this, null);
+		}
+		Declaration name = symTab.getNode(statement_In.name);
+		if (name != null && name.nodeType == statement_In.source.nodeType) {
+			statement_In.setDec(name);
+		} else {
+			throw new SemanticException(statement_In.firstToken, message);
+		}
+		return statement_In;
 	}
 
 	@Override
