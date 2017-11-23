@@ -61,8 +61,22 @@ public class TypeCheckVisitor implements ASTVisitor {
 
 	@Override
 	public Object visitDeclaration_Variable(Declaration_Variable declaration_Variable, Object arg) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		if (declaration_Variable.e != null) {
+			declaration_Variable.e.visit(this, null);
+		}
+		if (symTab.lookupNode(declaration_Variable.name)) {
+			String message = "Visit Declaration Variable";
+			throw new SemanticException(declaration_Variable.firstToken, message);
+		}
+		symTab.insertNode(declaration_Variable.name, declaration_Variable);
+		declaration_Variable.nodeType = TypeUtils.getType(declaration_Variable.type);
+		if (declaration_Variable.e != null) {
+			if (declaration_Variable.nodeType != declaration_Variable.e.nodeType) {
+				String message = "Visit Declaration Variable";
+				throw new SemanticException(declaration_Variable.firstToken, message);
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -72,11 +86,18 @@ public class TypeCheckVisitor implements ASTVisitor {
 		if (expression_Binary.e0.nodeType == expression_Binary.e1.nodeType && expression_Binary.nodeType != null) {
 			if (expression_Binary.op == Kind.OP_EQ || expression_Binary.op == Kind.OP_NEQ) {
 				expression_Binary.nodeType = Type.BOOLEAN;
-			} else if ((expression_Binary.op == Kind.OP_GE || expression_Binary.op == Kind.OP_GT || expression_Binary.op == Kind.OP_LE || expression_Binary.op == Kind.OP_LT) && expression_Binary.e0.nodeType == Type.INTEGER) {
+			} else if ((expression_Binary.op == Kind.OP_GE || expression_Binary.op == Kind.OP_GT
+					|| expression_Binary.op == Kind.OP_LE || expression_Binary.op == Kind.OP_LT)
+					&& expression_Binary.e0.nodeType == Type.INTEGER) {
 				expression_Binary.nodeType = Type.BOOLEAN;
-			} else if ((expression_Binary.op == Kind.OP_AND || expression_Binary.op == Kind.OP_OR) && (expression_Binary.e0.nodeType == Type.INTEGER || expression_Binary.e0.nodeType == Type.BOOLEAN)) {
+			} else if ((expression_Binary.op == Kind.OP_AND || expression_Binary.op == Kind.OP_OR)
+					&& (expression_Binary.e0.nodeType == Type.INTEGER
+							|| expression_Binary.e0.nodeType == Type.BOOLEAN)) {
 				expression_Binary.nodeType = expression_Binary.e0.nodeType;
-			} else if ((expression_Binary.op == Kind.OP_DIV || expression_Binary.op == Kind.OP_MINUS || expression_Binary.op == Kind.OP_MOD || expression_Binary.op == Kind.OP_PLUS || expression_Binary.op == Kind.OP_POWER || expression_Binary.op == Kind.OP_TIMES) && expression_Binary.e0.nodeType == Type.INTEGER) {
+			} else if ((expression_Binary.op == Kind.OP_DIV || expression_Binary.op == Kind.OP_MINUS
+					|| expression_Binary.op == Kind.OP_MOD || expression_Binary.op == Kind.OP_PLUS
+					|| expression_Binary.op == Kind.OP_POWER || expression_Binary.op == Kind.OP_TIMES)
+					&& expression_Binary.e0.nodeType == Type.INTEGER) {
 				expression_Binary.nodeType = Type.INTEGER;
 			} else {
 				expression_Binary.nodeType = null;
@@ -94,7 +115,8 @@ public class TypeCheckVisitor implements ASTVisitor {
 		Type tempType = expression_Unary.e.nodeType;
 		if (expression_Unary.op == Kind.OP_EXCL && (tempType == Type.BOOLEAN || tempType == Type.INTEGER)) {
 			expression_Unary.nodeType = tempType;
-		} else if ((expression_Unary.op == Kind.OP_PLUS || expression_Unary.op == Kind.OP_MINUS) && tempType == Type.INTEGER) {
+		} else if ((expression_Unary.op == Kind.OP_PLUS || expression_Unary.op == Kind.OP_MINUS)
+				&& tempType == Type.INTEGER) {
 			expression_Unary.nodeType = Type.INTEGER;
 		} else {
 			expression_Unary.nodeType = null;
@@ -165,7 +187,7 @@ public class TypeCheckVisitor implements ASTVisitor {
 			throw new SemanticException(source_Ident.firstToken, message);
 		}
 		source_Ident.nodeType = symTab.getNode(source_Ident.name).nodeType;
-		if (source_Ident.nodeType != Type.FILE ||source_Ident.nodeType != Type.URL) {
+		if (source_Ident.nodeType != Type.FILE || source_Ident.nodeType != Type.URL) {
 			String message = "Source Ident Type in Visit Source Identifier is not a File or URL";
 			throw new SemanticException(source_Ident.firstToken, message);
 		}
