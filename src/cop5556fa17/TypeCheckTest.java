@@ -25,9 +25,9 @@ public class TypeCheckTest {
 
 	/**
 	 * Scans, parses, and type checks given input String.
-	 * 
+	 *
 	 * Catches, prints, and then rethrows any exceptions that occur.
-	 * 
+	 *
 	 * @param input
 	 * @throws Exception
 	 */
@@ -47,7 +47,7 @@ public class TypeCheckTest {
 
 	/**
 	 * Simple test case with an almost empty program.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -67,7 +67,7 @@ public class TypeCheckTest {
 
 	/**
 	 * This test should pass with a fully implemented assignment
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -79,13 +79,35 @@ public class TypeCheckTest {
 	/**
 	 * This program does not declare k. The TypeCheckVisitor should throw a
 	 * SemanticException in a fully implemented assignment.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
 	public void testUndec() throws Exception {
 		String input = "prog k = 42;";
 		thrown.expect(SemanticException.class);
+		typeCheck(input);
+	}
+
+	/**
+	 * This test should pass with a fully implemented assignment
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void subTest01() throws Exception {
+		String input = "prog int un = +10;";
+		typeCheck(input);
+	}
+
+	/**
+	 * This test should pass with a fully implemented assignment
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void subTest02() throws Exception {
+		String input = "prog file s = \"some source\"; image i; i -> s; ";
 		typeCheck(input);
 	}
 

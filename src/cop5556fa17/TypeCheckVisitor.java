@@ -53,7 +53,7 @@ public class TypeCheckVisitor implements ASTVisitor {
 	/**
 	 * The program name is only used for naming the class. It does not rule out
 	 * variables with the same name. It is returned for convenience.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Override
@@ -119,7 +119,7 @@ public class TypeCheckVisitor implements ASTVisitor {
 	@Override
 	public Object visitExpression_Unary(Expression_Unary expression_Unary, Object arg) throws Exception {
 		if (expression_Unary.e != null) {
-			expression_Unary.visit(this, null);
+			expression_Unary.e.visit(this, null);
 		}
 		Type tempType = expression_Unary.e.nodeType;
 		if (expression_Unary.op == Kind.OP_EXCL && (tempType == Type.BOOLEAN || tempType == Type.INTEGER)) {
@@ -413,8 +413,9 @@ public class TypeCheckVisitor implements ASTVisitor {
 			String message = "Visit Sink Ident not found in Symbol Table";
 			throw new SemanticException(sink_Ident.firstToken, message);
 		}
+		sink_Ident.nodeType = symTab.getNode(sink_Ident.name).nodeType;
 		if (sink_Ident.nodeType == Type.FILE) {
-			sink_Ident.nodeType = symTab.getNode(sink_Ident.name).nodeType;
+			// Do Nothing
 		} else {
 			String message = "Visit Sink Ident";
 			throw new SemanticException(sink_Ident.firstToken, message);
