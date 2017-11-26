@@ -74,9 +74,9 @@ public class TypeCheckVisitor implements ASTVisitor {
 			throw new SemanticException(declaration_Variable.firstToken, message);
 		}
 		symTab.insertNode(declaration_Variable.name, declaration_Variable);
-		declaration_Variable.nodeType = TypeUtils.getType(declaration_Variable.type);
+		declaration_Variable.setNodeType(TypeUtils.getType(declaration_Variable.type));
 		if (declaration_Variable.e != null) {
-			if (declaration_Variable.nodeType != declaration_Variable.e.nodeType) {
+			if (declaration_Variable.getNodeType() != declaration_Variable.e.getNodeType()) {
 				String message = "Visit Declaration Variable";
 				throw new SemanticException(declaration_Variable.firstToken, message);
 			}
@@ -93,23 +93,25 @@ public class TypeCheckVisitor implements ASTVisitor {
 			expression_Binary.e1.visit(this, arg);
 		}
 		if (expression_Binary.op == Kind.OP_EQ || expression_Binary.op == Kind.OP_NEQ) {
-			expression_Binary.nodeType = Type.BOOLEAN;
+			expression_Binary.setNodeType(Type.BOOLEAN);
 		} else if ((expression_Binary.op == Kind.OP_GE || expression_Binary.op == Kind.OP_GT
 				|| expression_Binary.op == Kind.OP_LE || expression_Binary.op == Kind.OP_LT)
-				&& expression_Binary.e0.nodeType == Type.INTEGER) {
-			expression_Binary.nodeType = Type.BOOLEAN;
+				&& expression_Binary.e0.getNodeType() == Type.INTEGER) {
+			expression_Binary.setNodeType(Type.BOOLEAN);
 		} else if ((expression_Binary.op == Kind.OP_AND || expression_Binary.op == Kind.OP_OR)
-				&& (expression_Binary.e0.nodeType == Type.INTEGER || expression_Binary.e0.nodeType == Type.BOOLEAN)) {
-			expression_Binary.nodeType = expression_Binary.e0.nodeType;
+				&& (expression_Binary.e0.getNodeType() == Type.INTEGER
+						|| expression_Binary.e0.getNodeType() == Type.BOOLEAN)) {
+			expression_Binary.setNodeType(expression_Binary.e0.getNodeType());
 		} else if ((expression_Binary.op == Kind.OP_DIV || expression_Binary.op == Kind.OP_MINUS
 				|| expression_Binary.op == Kind.OP_MOD || expression_Binary.op == Kind.OP_PLUS
 				|| expression_Binary.op == Kind.OP_POWER || expression_Binary.op == Kind.OP_TIMES)
-				&& expression_Binary.e0.nodeType == Type.INTEGER) {
-			expression_Binary.nodeType = Type.INTEGER;
+				&& expression_Binary.e0.getNodeType() == Type.INTEGER) {
+			expression_Binary.setNodeType(Type.INTEGER);
 		} else {
-			expression_Binary.nodeType = null;
+			expression_Binary.setNodeType(null);
 		}
-		if (!(expression_Binary.e0.nodeType == expression_Binary.e1.nodeType && expression_Binary.nodeType != null)) {
+		if (!(expression_Binary.e0.getNodeType() == expression_Binary.e1.getNodeType()
+				&& expression_Binary.getNodeType() != null)) {
 			String message = "Visit Binary Expression";
 			throw new SemanticException(expression_Binary.firstToken, message);
 		}
@@ -121,16 +123,16 @@ public class TypeCheckVisitor implements ASTVisitor {
 		if (expression_Unary.e != null) {
 			expression_Unary.e.visit(this, null);
 		}
-		Type tempType = expression_Unary.e.nodeType;
+		Type tempType = expression_Unary.e.getNodeType();
 		if (expression_Unary.op == Kind.OP_EXCL && (tempType == Type.BOOLEAN || tempType == Type.INTEGER)) {
-			expression_Unary.nodeType = tempType;
+			expression_Unary.setNodeType(tempType);
 		} else if ((expression_Unary.op == Kind.OP_PLUS || expression_Unary.op == Kind.OP_MINUS)
 				&& tempType == Type.INTEGER) {
-			expression_Unary.nodeType = Type.INTEGER;
+			expression_Unary.setNodeType(Type.INTEGER);
 		} else {
-			expression_Unary.nodeType = null;
+			expression_Unary.setNodeType(null);
 		}
-		if (expression_Unary.nodeType == null) {
+		if (expression_Unary.getNodeType() == null) {
 			String message = "Visit Unary Expression";
 			throw new SemanticException(expression_Unary.firstToken, message);
 		}
@@ -139,14 +141,13 @@ public class TypeCheckVisitor implements ASTVisitor {
 
 	@Override
 	public Object visitIndex(Index index, Object arg) throws Exception {
-		// TODO Auto-generated method stub
 		if (index.e0 != null) {
 			index.e0.visit(this, arg);
 		}
 		if (index.e1 != null) {
 			index.e1.visit(this, arg);
 		}
-		if (index.e0.nodeType == Type.INTEGER && index.e1.nodeType == Type.INTEGER) {
+		if (index.e0.getNodeType() == Type.INTEGER && index.e1.getNodeType() == Type.INTEGER) {
 			index.setCartesian(!(index.e0.firstToken.kind == Kind.KW_r && index.e1.firstToken.kind == Kind.KW_a));
 		} else {
 			String message = "Visit Index";
@@ -162,14 +163,14 @@ public class TypeCheckVisitor implements ASTVisitor {
 			expression_PixelSelector.index.visit(this, null);
 		}
 		Declaration tempDec = symTab.getNode(expression_PixelSelector.name);
-		if (tempDec.nodeType == Type.IMAGE) {
-			expression_PixelSelector.nodeType = Type.INTEGER;
+		if (tempDec.getNodeType() == Type.IMAGE) {
+			expression_PixelSelector.setNodeType(Type.INTEGER);
 		} else if (expression_PixelSelector.index == null) {
-			expression_PixelSelector.nodeType = tempDec.nodeType;
+			expression_PixelSelector.setNodeType(tempDec.getNodeType());
 		} else {
-			expression_PixelSelector.nodeType = null;
+			expression_PixelSelector.setNodeType(null);
 		}
-		if (expression_PixelSelector.nodeType == null) {
+		if (expression_PixelSelector.getNodeType() == null) {
 			String message = "Visit Pixel Selector Expression";
 			throw new SemanticException(expression_PixelSelector.firstToken, message);
 		}
@@ -188,9 +189,9 @@ public class TypeCheckVisitor implements ASTVisitor {
 		if (expression_Conditional.falseExpression != null) {
 			expression_Conditional.falseExpression.visit(this, arg);
 		}
-		if (expression_Conditional.condition.nodeType == Type.BOOLEAN
-				&& expression_Conditional.trueExpression.nodeType == expression_Conditional.falseExpression.nodeType) {
-			expression_Conditional.nodeType = expression_Conditional.trueExpression.nodeType;
+		if (expression_Conditional.condition.getNodeType() == Type.BOOLEAN && expression_Conditional.trueExpression
+				.getNodeType() == expression_Conditional.falseExpression.getNodeType()) {
+			expression_Conditional.setNodeType(expression_Conditional.trueExpression.getNodeType());
 		} else {
 			String message = "Visit Conditional Expression";
 			throw new SemanticException(expression_Conditional.firstToken, message);
@@ -214,11 +215,11 @@ public class TypeCheckVisitor implements ASTVisitor {
 			throw new SemanticException(declaration_Image.firstToken, message);
 		}
 		symTab.insertNode(declaration_Image.name, declaration_Image);
-		declaration_Image.nodeType = Type.IMAGE;
+		declaration_Image.setNodeType(Type.IMAGE);
 
 		if (declaration_Image.xSize != null) {
-			if (!(declaration_Image.ySize != null && declaration_Image.xSize.nodeType == Type.INTEGER
-					&& declaration_Image.ySize.nodeType == Type.INTEGER)) {
+			if (!(declaration_Image.ySize != null && declaration_Image.xSize.getNodeType() == Type.INTEGER
+					&& declaration_Image.ySize.getNodeType() == Type.INTEGER)) {
 				String message = "Visit Image Declaration";
 				throw new SemanticException(declaration_Image.firstToken, message);
 			}
@@ -245,7 +246,7 @@ public class TypeCheckVisitor implements ASTVisitor {
 		if (source_CommandLineParam.paramNum != null) {
 			source_CommandLineParam.paramNum.visit(this, null);
 		}
-		source_CommandLineParam.nodeType = source_CommandLineParam.paramNum.nodeType;
+		source_CommandLineParam.nodeType = source_CommandLineParam.paramNum.getNodeType();
 		if (source_CommandLineParam.nodeType != Type.INTEGER) {
 			String message = "Visit Source Command Line Parameter";
 			throw new SemanticException(source_CommandLineParam.firstToken, message);
@@ -259,7 +260,7 @@ public class TypeCheckVisitor implements ASTVisitor {
 			String message = "Visit Source Identifier";
 			throw new SemanticException(source_Ident.firstToken, message);
 		}
-		source_Ident.nodeType = symTab.getNode(source_Ident.name).nodeType;
+		source_Ident.nodeType = symTab.getNode(source_Ident.name).getNodeType();
 		if (!(source_Ident.nodeType == Type.FILE || source_Ident.nodeType == Type.URL)) {
 			String message = "Source Ident Type in Visit Source Identifier is not a File or URL";
 			throw new SemanticException(source_Ident.firstToken, message);
@@ -280,15 +281,15 @@ public class TypeCheckVisitor implements ASTVisitor {
 		symTab.insertNode(declaration_SourceSink.name, declaration_SourceSink);
 		switch (declaration_SourceSink.type) {
 		case KW_file:
-			declaration_SourceSink.nodeType = Type.FILE;
+			declaration_SourceSink.setNodeType(Type.FILE);
 			break;
 		case KW_url:
-			declaration_SourceSink.nodeType = Type.URL;
+			declaration_SourceSink.setNodeType(Type.URL);
 			break;
 		default:
 			throw new SemanticException(declaration_SourceSink.firstToken, message);
 		}
-		if (declaration_SourceSink.nodeType != declaration_SourceSink.source.nodeType) {
+		if (declaration_SourceSink.getNodeType() != declaration_SourceSink.source.nodeType) {
 			throw new SemanticException(declaration_SourceSink.firstToken, message);
 		}
 		return declaration_SourceSink;
@@ -296,7 +297,7 @@ public class TypeCheckVisitor implements ASTVisitor {
 
 	@Override
 	public Object visitExpression_IntLit(Expression_IntLit expression_IntLit, Object arg) throws Exception {
-		expression_IntLit.nodeType = Type.INTEGER;
+		expression_IntLit.setNodeType(Type.INTEGER);
 		return expression_IntLit;
 	}
 
@@ -306,11 +307,11 @@ public class TypeCheckVisitor implements ASTVisitor {
 		if (expression_FunctionAppWithExprArg.arg != null) {
 			expression_FunctionAppWithExprArg.arg.visit(this, null);
 		}
-		if (expression_FunctionAppWithExprArg.arg.nodeType != Type.INTEGER) {
+		if (expression_FunctionAppWithExprArg.arg.getNodeType() != Type.INTEGER) {
 			String message = "Visit Function Application with Expression Argument";
 			throw new SemanticException(expression_FunctionAppWithExprArg.firstToken, message);
 		} else {
-			expression_FunctionAppWithExprArg.nodeType = Type.INTEGER;
+			expression_FunctionAppWithExprArg.setNodeType(Type.INTEGER);
 		}
 		return expression_FunctionAppWithExprArg;
 	}
@@ -321,14 +322,14 @@ public class TypeCheckVisitor implements ASTVisitor {
 		if (expression_FunctionAppWithIndexArg.arg != null) {
 			expression_FunctionAppWithIndexArg.arg.visit(this, arg);
 		}
-		expression_FunctionAppWithIndexArg.nodeType = Type.INTEGER;
+		expression_FunctionAppWithIndexArg.setNodeType(Type.INTEGER);
 		return expression_FunctionAppWithIndexArg;
 	}
 
 	@Override
 	public Object visitExpression_PredefinedName(Expression_PredefinedName expression_PredefinedName, Object arg)
 			throws Exception {
-		expression_PredefinedName.nodeType = Type.INTEGER;
+		expression_PredefinedName.setNodeType(Type.INTEGER);
 		return expression_PredefinedName;
 	}
 
@@ -343,9 +344,9 @@ public class TypeCheckVisitor implements ASTVisitor {
 		}
 		Declaration name = symTab.getNode(statement_Out.name);
 
-		if (((name.nodeType == Type.INTEGER || name.nodeType == Type.BOOLEAN)
+		if (((name.getNodeType() == Type.INTEGER || name.getNodeType() == Type.BOOLEAN)
 				&& statement_Out.sink.nodeType == Type.SCREEN)
-				|| (name.nodeType == Type.IMAGE
+				|| (name.getNodeType() == Type.IMAGE
 						&& (statement_Out.sink.nodeType == Type.FILE || statement_Out.sink.nodeType == Type.SCREEN))) {
 			statement_Out.setDec(name);
 		} else {
@@ -357,11 +358,9 @@ public class TypeCheckVisitor implements ASTVisitor {
 	@Override
 	public Object visitStatement_In(Statement_In statement_In, Object arg) throws Exception {
 		String message = "Visit Statement In";
-		if (statement_In.source != null) {
+		if (symTab.lookupNode(statement_In.name)) {
 			statement_In.source.visit(this, null);
-		}
-		Declaration name = symTab.getNode(statement_In.name);
-		if (name != null && name.nodeType == statement_In.source.nodeType) {
+			Declaration name = symTab.getNode(statement_In.name);
 			statement_In.setDec(name);
 		} else {
 			throw new SemanticException(statement_In.firstToken, message);
@@ -377,7 +376,7 @@ public class TypeCheckVisitor implements ASTVisitor {
 		if (statement_Assign.e != null) {
 			statement_Assign.e.visit(this, null);
 		}
-		if (statement_Assign.lhs.nodeType == statement_Assign.e.nodeType) {
+		if (statement_Assign.lhs.getNodeType() == statement_Assign.e.getNodeType()) {
 			statement_Assign.setCartesian(statement_Assign.lhs.isCartesian);
 		} else {
 			String message = "Visit Statement Assignment";
@@ -396,7 +395,7 @@ public class TypeCheckVisitor implements ASTVisitor {
 			throw new SemanticException(lhs.firstToken, message);
 		}
 		lhs.declaration = symTab.getNode(lhs.name);
-		lhs.nodeType = lhs.declaration.nodeType;
+		lhs.setNodeType(lhs.declaration.getNodeType());
 		lhs.isCartesian = lhs.index != null ? lhs.index.isCartesian() : false;
 		return lhs;
 	}
@@ -413,7 +412,7 @@ public class TypeCheckVisitor implements ASTVisitor {
 			String message = "Visit Sink Ident not found in Symbol Table";
 			throw new SemanticException(sink_Ident.firstToken, message);
 		}
-		sink_Ident.nodeType = symTab.getNode(sink_Ident.name).nodeType;
+		sink_Ident.nodeType = symTab.getNode(sink_Ident.name).getNodeType();
 		if (sink_Ident.nodeType == Type.FILE) {
 			// Do Nothing
 		} else {
@@ -425,7 +424,7 @@ public class TypeCheckVisitor implements ASTVisitor {
 
 	@Override
 	public Object visitExpression_BooleanLit(Expression_BooleanLit expression_BooleanLit, Object arg) throws Exception {
-		expression_BooleanLit.nodeType = Type.BOOLEAN;
+		expression_BooleanLit.setNodeType(Type.BOOLEAN);
 		return expression_BooleanLit;
 	}
 
@@ -433,7 +432,7 @@ public class TypeCheckVisitor implements ASTVisitor {
 	public Object visitExpression_Ident(Expression_Ident expression_Ident, Object arg) throws Exception {
 		String message = "Visit Expression Identifier";
 		if (symTab.lookupNode(expression_Ident.name)) {
-			expression_Ident.nodeType = symTab.getNode(expression_Ident.name).nodeType;
+			expression_Ident.setNodeType(symTab.getNode(expression_Ident.name).getNodeType());
 		} else {
 			throw new SemanticException(expression_Ident.firstToken, message);
 		}
